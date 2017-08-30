@@ -22,19 +22,20 @@ class AlarmActivity : AppCompatActivity() {
 
         stopButton.setOnClickListener {
             ringtone.stop()
+            getSharedPreferences(getString(R.string.my_shared_preferences), MODE_PRIVATE)
+                    .edit()
+                    .putBoolean(getString(R.string.shared_preferences_alarm_active), false)
+                    .apply()
+            onBackPressed()
         }
 
     }
 
     override fun onResume() {
         super.onResume()
-
-        actionBar.hide()
-
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
-
     }
 
 }

@@ -8,4 +8,26 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyTheme" parent="AppTheme" >
+        <item name="colorPrimary">@color/myPrimaryColor</item>
+        <item name="colorPrimaryDark">@color/myPrimaryDarkColor</item>
+        <item name="colorAccent">@color/myAccentColor</item>
+        <item name="android:colorBackground">@color/myBackgroundColor</item>
+        <item name="android:colorForeground">@color/myForegroundColor</item>
+        <item name="android:textColorPrimary">@color/myPrimaryTextColor</item>
+        <item name="android:textColorSecondary">@color/mySecondaryTextColor</item>
+        <item name="android:textColorPrimaryInverse">@color/myPrimaryTextInvertColor</item>
+    </style>
+
+    <color name="myPrimaryColor">#999999</color>
+    <color name="myPrimaryDarkColor">#999999</color>
+    <color name="myAccentColor">#777777</color>
+    <color name="myBackgroundColor">#696969</color>
+    <color name="myForegroundColor">#777777</color>
+    <color name="myNavigationBarColor">#555555</color>
+    <color name="myStatusBarColor">#BBBBBB</color>
+    <color name="myPrimaryTextColor">#FFFFFF</color>
+    <color name="myPrimaryTextInvertColor">#AAAAAA</color>
+    <color name="mySecondaryTextColor">#AAAAAA</color>
+
 </resources>

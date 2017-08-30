@@ -2,31 +2,57 @@ package org.hedgehog.onetouchalarm
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.Menu
 import android.widget.Button
+import android.widget.Toast
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var startButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val startButton = findViewById<Button>(R.id.start_button)
-
-        
+        startButton = findViewById<Button>(R.id.start_button)
 
         startButton.setOnClickListener {
             val notificationIntent = Intent(this, AlarmReceiver::class.java)
             val pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-            val time = 1000 * 60
-            alarmManager.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + time, pendingIntent)
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.AM_PM, Calendar.PM)
+            val alarmTime = calendar.time.time + getSharedPreferencesTime()
+            if (getSharedPreferences(getString(R.string.my_shared_preferences), Context.MODE_PRIVATE)
+                    .getBoolean(getString(R.string.shared_preferences_alarm_active), true)) {
+                alarmManager.cancel(pendingIntent)
+                Toast.makeText(this, "Alarm is canceled", Toast.LENGTH_SHORT).show()
+                startButton.text = getString(R.string.start)
+                setAlarmActivityPreferences(false)
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
+                Toast.makeText(this, "Alarm will call at ${getAlarmTime(alarmTime)}", Toast.LENGTH_SHORT).show()
+                startButton.text = getString(R.string.stop_button_text)
+                setAlarmActivityPreferences(true)
+            }
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (getSharedPreferences(getString(R.string.my_shared_preferences), Context.MODE_PRIVATE)
+                .getBoolean(getString(R.string.shared_preferences_alarm_active), true)) {
+            startButton.text = getString(R.string.stop_button_text)
+        } else {
+            startButton.text = getString(R.string.start)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -43,9 +69,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun getSharedPreferences() : Long {
+    private fun getSharedPreferencesTime(): Long {
         val defaultValue: Long = 1000 * 60 * 60 * 8
-        return getPreferences(MODE_PRIVATE).getLong(getString(R.string.shared_preferences_time), defaultValue)
+        return getSharedPreferences(getString(R.string.my_shared_preferences), MODE_PRIVATE).getLong(getString(R.string.shared_preferences_time), defaultValue)
+    }
+
+    private fun setAlarmActivityPreferences(boolean: Boolean) {
+        val sPref = getSharedPreferences(getString(R.string.my_shared_preferences), MODE_PRIVATE)
+        val sPrefEditor = sPref.edit()
+        sPrefEditor.putBoolean(getString(R.string.shared_preferences_alarm_active), boolean)
+        sPrefEditor.apply()
+    }
+
+    private fun getAlarmTime(time: Long): String {
+        val simpleDateFormat = SimpleDateFormat("HH:mm")
+        val date = Date(time)
+        return simpleDateFormat.format(date)
     }
 
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MyTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/myPrimaryColor</item>
+        <item name="colorPrimaryDark">@color/myPrimaryDarkColor</item>
+        <item name="colorAccent">@color/myAccentColor</item>
+        <item name="android:colorBackground">@color/myBackgroundColor</item>
+        <item name="android:colorForeground">@color/myForegroundColor</item>
+        <item name="android:navigationBarColor">@color/myNavigationBarColor</item>
+        <item name="android:statusBarColor">@color/myStatusBarColor</item>
+        <item name="android:textColorPrimary">@color/myPrimaryTextColor</item>
+        <item name="android:textColorSecondary">@color/mySecondaryTextColor</item>
+        <item name="android:textColorPrimaryInverse">@color/myPrimaryTextInvertColor</item>
+    </style>
+</resources>
