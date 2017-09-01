@@ -33,6 +33,7 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        supportActionBar?.hide()
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)

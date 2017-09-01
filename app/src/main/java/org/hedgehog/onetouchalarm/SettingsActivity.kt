@@ -33,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
             if (hours.text.toString() != "") {
                 if (minutes.text.toString() != "") {
                     if (minutes.text.toString().toInt() <= 60) {
-                        setSharedPreferences(getMilliseconds(hours.text.toString().toInt(), minutes.text.toString().toInt()))
+                        setTimeSharedPreferences(getMilliseconds(hours.text.toString().toInt(), minutes.text.toString().toInt()))
                         Toast.makeText(this, "Time was changed at ${getHours()}:${getMinutes()}", Toast.LENGTH_SHORT).show()
                         onBackPressed()
                     } else {
@@ -58,7 +58,7 @@ class SettingsActivity : AppCompatActivity() {
         title = getString(R.string.settings_menu_item_title)
     }
 
-    private fun setSharedPreferences(time: Long) {
+    private fun setTimeSharedPreferences(time: Long) {
         val sPref = getSharedPreferences(getString(R.string.my_shared_preferences), Context.MODE_PRIVATE)
         val sPrefEditor = sPref.edit()
         sPrefEditor.putLong(getString(R.string.shared_preferences_time), time)
@@ -69,17 +69,17 @@ class SettingsActivity : AppCompatActivity() {
         return h * hours + m * minutes
     }
 
-    private fun getSharedPreferences(): Long {
+    private fun getTimeSharedPreferences(): Long {
         val defaultValue: Long = 1000 * 60 * 60 * 8
         return getSharedPreferences(getString(R.string.my_shared_preferences), MODE_PRIVATE).getLong(getString(R.string.shared_preferences_time), defaultValue)
     }
 
     private fun getHours(): Long {
-        return getSharedPreferences() / h
+        return getTimeSharedPreferences() / h
     }
 
     private fun getMinutes(): Long {
-        return (getSharedPreferences() % h) / m
+        return (getTimeSharedPreferences() % h) / m
     }
 
 }

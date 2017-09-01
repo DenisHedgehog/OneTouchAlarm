@@ -11,4 +11,5 @@
     <string name="ok_button">Ok</string>
     <string name="my_shared_preferences">MySharedPreferences</string>
     <string name="shared_preferences_alarm_active">alarmIsActive</string>
+    <string name="shared_preferences_alarm_time">alarmTime</string>
 </resources>

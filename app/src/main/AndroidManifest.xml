@@ -25,6 +25,7 @@
             android:screenOrientation="portrait"/>
 
         <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".BootDeviceReceiver" />
     </application>
 
 </manifest>

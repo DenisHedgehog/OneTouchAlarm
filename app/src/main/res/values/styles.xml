@@ -19,13 +19,13 @@
         <item name="android:textColorPrimaryInverse">@color/myPrimaryTextInvertColor</item>
     </style>
 
-    <color name="myPrimaryColor">#999999</color>
-    <color name="myPrimaryDarkColor">#999999</color>
-    <color name="myAccentColor">#777777</color>
-    <color name="myBackgroundColor">#696969</color>
-    <color name="myForegroundColor">#777777</color>
-    <color name="myNavigationBarColor">#555555</color>
-    <color name="myStatusBarColor">#BBBBBB</color>
+    <color name="myPrimaryColor">#222222</color>
+    <color name="myPrimaryDarkColor">#FFFFFF</color>
+    <color name="myAccentColor">#0d47a1</color>
+    <color name="myBackgroundColor">#222222</color>
+    <color name="myForegroundColor">#0d47a1</color>
+    <color name="myNavigationBarColor">#424242</color>
+    <color name="myStatusBarColor">#222222</color>
     <color name="myPrimaryTextColor">#FFFFFF</color>
     <color name="myPrimaryTextInvertColor">#AAAAAA</color>
     <color name="mySecondaryTextColor">#AAAAAA</color>
