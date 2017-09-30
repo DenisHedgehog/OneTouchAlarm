@@ -15,13 +15,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.i("RECIEVER MF", "RECIEVER WAS STARTED")
-        playSound(context)
-        context.startActivity(Intent(context, AlarmActivity::class.java))
-    }
-
-    fun playSound(context: Context) {
-        Toast.makeText(context, "WAKE UP!", Toast.LENGTH_SHORT).show()
-//        RingtoneManager.getRingtone(context, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)).play()
+        context.startActivity(Intent(context, AlarmActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
 }

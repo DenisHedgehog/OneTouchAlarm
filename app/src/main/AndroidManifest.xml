@@ -3,6 +3,7 @@
     package="org.hedgehog.onetouchalarm">
     
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -19,13 +20,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".AlarmActivity"
             android:screenOrientation="portrait"/>
 
         <receiver android:name=".AlarmReceiver" />
-        <receiver android:name=".BootDeviceReceiver" />
+        <receiver android:name=".BootDeviceReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -12,4 +12,7 @@
     <string name="my_shared_preferences">MySharedPreferences</string>
     <string name="shared_preferences_alarm_active">alarmIsActive</string>
     <string name="shared_preferences_alarm_time">alarmTime</string>
+    <string name="alarm_notification">Alarm will call at</string>
+    <string name="alarm_is_canceled">Alarm is canceled</string>
+    <string name="alarm_will_call_at">Alarm will call at</string>
 </resources>
