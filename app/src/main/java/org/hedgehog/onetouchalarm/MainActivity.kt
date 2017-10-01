@@ -116,6 +116,8 @@ class MainActivity : AppCompatActivity() {
                         .getBoolean(getString(R.string.shared_preferences_alarm_active), false)) {
                     startButton.text = getString(R.string.stop_button_text)
                     Toast.makeText(this, "${getString(R.string.alarm_will_call_at)} ${getAlarmTime(alarmTime)}", Toast.LENGTH_SHORT).show()
+                } else {
+                    startButton.text = getString(R.string.start)
                 }
                 val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.notify(NOTIFICATION_ID, notificationAboutAlarm(this))
@@ -127,7 +129,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (getSharedPreferences(getString(R.string.my_shared_preferences), Context.MODE_PRIVATE)
-                .getBoolean(getString(R.string.shared_preferences_alarm_active), true)) {
+                .getBoolean(getString(R.string.shared_preferences_alarm_active), false)) {
             startButton.text = getString(R.string.stop_button_text)
         } else {
             startButton.text = getString(R.string.start)
