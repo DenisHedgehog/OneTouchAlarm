@@ -6,15 +6,12 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
-import android.provider.Settings
+import android.support.v7.app.AppCompatActivity
 import android.text.format.DateFormat
 import android.util.Log
-import android.util.TimeUtils
-import android.view.Menu
 import android.widget.Button
 import android.widget.TimePicker
 import android.widget.Toast
@@ -50,6 +47,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         startButton.setOnClickListener {
+            val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) == 0) {
+                Toast.makeText(this, "WARNING: Alarm volume is null", Toast.LENGTH_SHORT).show()
+            }
+
             val notificationIntent = Intent(this, AlarmReceiver::class.java)
             val pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
@@ -97,25 +99,27 @@ class MainActivity : AppCompatActivity() {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
                     setAlarmDateSharedPreferences(alarmTime)
                     setAlarmActivityPreferences(true)
-                    Log.i("Alarm was set", "sdk 23+ ${getAlarmTime(getSharedPreferencesTime(this))}, alarmTime = ${getAlarmTime(alarmTime)}")
+                    Log.i("Alarm was set", "sdk 23+ ${getAlarmTime(this, getSharedPreferencesTime(this))}, alarmTime = ${getAlarmTime(this, alarmTime)}")
                 } else {
                     if (Build.VERSION.SDK_INT >= 19) {
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
                         setAlarmDateSharedPreferences(alarmTime)
                         setAlarmActivityPreferences(true)
-                        Log.i("Alarm was set", "19 <= sdk < 23 ${getAlarmTime(getSharedPreferencesTime(this))}, alarmTime = ${getAlarmTime(alarmTime)}")
+                        Log.i("Alarm was set", "19 <= sdk < 23 ${getAlarmTime(this, getSharedPreferencesTime(this))}, alarmTime = ${getAlarmTime(this, alarmTime)}")
                     } else {
                         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
                         setAlarmDateSharedPreferences(alarmTime)
                         setAlarmActivityPreferences(true)
-                        Log.i("Alarm was set", "sdk < 19 ${getAlarmTime(getSharedPreferencesTime(this))}, alarmTime = ${getAlarmTime(alarmTime)}")
+                        Log.i("Alarm was set", "sdk < 19 ${getAlarmTime(this, getSharedPreferencesTime(this))}, alarmTime = ${getAlarmTime(this, alarmTime)}")
                     }
-
                 }
                 if (getSharedPreferences(getString(R.string.my_shared_preferences), Context.MODE_PRIVATE)
                         .getBoolean(getString(R.string.shared_preferences_alarm_active), false)) {
                     startButton.text = getString(R.string.stop_button_text)
-                    Toast.makeText(this, "${getString(R.string.alarm_will_call_at)} ${getAlarmTime(alarmTime)}", Toast.LENGTH_SHORT).show()
+
+                    // TODO: 12/24 time description in toast
+
+                    Toast.makeText(this, "${getString(R.string.alarm_will_call_at)} ${getAlarmTime(this, alarmTime)}", Toast.LENGTH_SHORT).show()
                 } else {
                     startButton.text = getString(R.string.start)
                 }
@@ -157,13 +161,18 @@ class MainActivity : AppCompatActivity() {
             return Notification.Builder(context)
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setContentTitle(context.getString(R.string.app_name))
-                    .setContentText("${context.getString(R.string.alarm_notification)} ${getAlarmTime(getSharedPreferencesTime(context))}")
+                    .setContentText("${context.getString(R.string.alarm_notification)} ${getAlarmTime(context, getSharedPreferencesTime(context))}")
                     .setOngoing(true)
                     .build()
         }
 
-        fun getAlarmTime(time: Long): String {
-            val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
+        fun getAlarmTime(context: Context, time: Long): String {
+            var simpleDateFormat: SimpleDateFormat
+            if (DateFormat.is24HourFormat(context)) {
+                simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
+            } else {
+                simpleDateFormat = SimpleDateFormat("dd.MM.yyyy hh:mm aa")
+            }
             val date = Date(time)
             return simpleDateFormat.format(date)
         }
