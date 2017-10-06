@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             timePicker.setIs24HourView(false)
         }
 
-
         if (getSharedPreferences(getString(R.string.my_shared_preferences), Context.MODE_PRIVATE)
                 .getBoolean(getString(R.string.shared_preferences_alarm_active), false)) {
             val time = Date(getSharedPreferencesTime(this))
@@ -66,7 +65,6 @@ class MainActivity : AppCompatActivity() {
                 val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.cancel(NOTIFICATION_ID)
             } else {
-
                 var year = Calendar.getInstance().get(Calendar.YEAR) - 1900
                 var month = Calendar.getInstance().get(Calendar.MONTH)
                 var day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)

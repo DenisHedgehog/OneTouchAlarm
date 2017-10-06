@@ -27,7 +27,6 @@ class AlarmActivity : AppCompatActivity() {
     private lateinit var ringtone: Ringtone
     private var kappa = 0
     private lateinit var player: MediaPlayer
-    private var stopped = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +66,6 @@ class AlarmActivity : AppCompatActivity() {
 
     }
 
-    // TODO: FIX START TIME IN TIME PICKER
-
     override fun onPause() {
         super.onPause()
         overridePendingTransition(0, 0)
@@ -87,7 +84,7 @@ class AlarmActivity : AppCompatActivity() {
                 val notificationIntent = Intent(this, AlarmReceiver::class.java)
                 val pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                 val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-                val alarmTime: Long = Date().time + 1000 * 60 * 10
+                val alarmTime: Long = Date().time + 1000 * 60 * 1
                 if (Build.VERSION.SDK_INT >= 23) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
                     setAlarmDateSharedPreferences(alarmTime)
@@ -142,6 +139,7 @@ class AlarmActivity : AppCompatActivity() {
 
     companion object {
         private var count = 0
+        private var stopped = false
     }
 
 }
