@@ -9,7 +9,6 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.media.Ringtone
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -24,7 +23,6 @@ import java.util.*
  */
 class AlarmActivity : AppCompatActivity() {
 
-    private lateinit var ringtone: Ringtone
     private var kappa = 0
     private lateinit var player: MediaPlayer
 
@@ -46,7 +44,7 @@ class AlarmActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
 
-        player = MediaPlayer()//.create(this, R.raw.my_alarm)
+        player = MediaPlayer()
         if (Build.VERSION.SDK_INT >= 21) {
             val attribute = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build()
             player.setAudioAttributes(attribute)
@@ -59,12 +57,13 @@ class AlarmActivity : AppCompatActivity() {
         player.prepare()
         player.start()
         player.setOnCompletionListener {
-            if (!stopped) {
-                finish()
-            }
+            stopped = false
+            finish()
         }
 
     }
+
+    // TODO: Notification about 3 missed alarm
 
     override fun onPause() {
         super.onPause()
@@ -79,7 +78,7 @@ class AlarmActivity : AppCompatActivity() {
         notificationManager.cancel(MainActivity.NOTIFICATION_ID)
         if (!stopped) {
             count++
-            Log.i("alarm activity", "alarm isn't stopped, count = $count")
+            Log.i("alarm activity", "stopped = $stopped, count = $count")
             if (count < 3) {
                 val notificationIntent = Intent(this, AlarmReceiver::class.java)
                 val pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -103,8 +102,12 @@ class AlarmActivity : AppCompatActivity() {
                         Log.i("Alarm was set", "sdk < 19 ${MainActivity.getAlarmTime(this, MainActivity.getSharedPreferencesTime(this))}, alarmTime = ${MainActivity.getAlarmTime(this, alarmTime)}")
                     }
                 }
+                val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                nm.notify(MainActivity.NOTIFICATION_ID, MainActivity.notificationAboutAlarm(this))
             }
+            player.stop()
         } else {
+            Log.i("alarm activity", "stopped = $stopped, count = $count")
             player.stop()
         }
 
